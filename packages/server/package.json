@@ -1,0 +1,20 @@
+{
+  "name": "@ts-gun/server",
+  "version": "0.10.0",
+  "description": "ts-gun Server Implementation",
+  "main": "index.js",
+  "author": "Jonas Kugelmann <public@kumans.net>",
+  "license": "(Zlib OR MIT OR Apache-2.0)",
+  "scripts": {
+    "start": "node ./lib/index.ts",
+    "build": "tsc -b ."
+  },
+  "dependencies": {
+    "@ts-gun/deduplication": "0.10.0",
+    "@ts-gun/ham": "0.10.0",
+    "ws": "^6.1.2"
+  },
+  "devDependencies": {
+    "@types/ws": "^6.0.1"
+  }
+}

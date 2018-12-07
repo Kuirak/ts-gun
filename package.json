@@ -1,0 +1,30 @@
+{
+  "name": "ts-gun",
+  "private": true,
+  "version": "0.10.0",
+  "description": "A modular implementation of gun db in typescript",
+  "workspaces": [
+    "packages/*"
+  ],
+  "keywords": [
+    "gun",
+    "gundb",
+    "realtime",
+    "graph",
+    "database",
+    "offline-first",
+    "typescirpt"
+  ],
+  "author": "Jonas Kugelmann <public@kumans.net>",
+  "license": "(Zlib OR MIT OR Apache-2.0)",
+  "devDependencies": {
+    "@types/jest": "^23.3.10",
+    "jest": "^23.6.0",
+    "prettier": "^1.15.3",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.17.0",
+    "typescript": "^3.2.1"
+  }
+
+}

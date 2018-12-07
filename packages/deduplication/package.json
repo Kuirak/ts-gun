@@ -1,0 +1,11 @@
+{
+  "name": "@ts-gun/deduplication",
+  "version": "0.10.0",
+  "description": "Deduplication code of ts-gun",
+  "main": "lib/index.js",
+  "author": "Jonas Kugelmann <public@kumans.net>",
+  "license": "(Zlib OR MIT OR Apache-2.0)",
+  "scripts": {
+    "build": "tsc -b ."
+  }
+}

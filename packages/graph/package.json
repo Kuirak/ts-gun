@@ -1,0 +1,19 @@
+{
+  "name": "@ts-gun/graph",
+  "version": "0.10.0",
+  "description": "Graph Data Structure implementation for ts-gun",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -b .",
+    "test": "ts-jet"
+  },
+  "keywords": [
+    "graph",
+    "data",
+    "structure",
+    "gun",
+    "gundb"
+  ],
+  "author": "Jonas Kugelmann <public@kumans.net>",
+  "license": "(Zlib OR MIT OR Apache-2.0)"
+}

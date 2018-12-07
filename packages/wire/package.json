@@ -1,0 +1,20 @@
+{
+  "name": "@ts-gun/wire",
+  "version": "0.10.0",
+  "description": "Wire implementation of ts-gun",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -b .",
+    "test": "ts-jest"
+  },
+  "keywords": [
+    "wire",
+    "gun",
+    "gundb",
+    "websockets"
+  ],
+  "author": "Jonas Kugelmann <public@kumans.net>",
+  "license": "(Zlib OR MIT OR Apache-2.0)",
+  "dependencies": {},
+  "devDependencies": {}
+}

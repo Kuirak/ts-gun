@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.settings.json",
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "traceResolution": true,
+    "baseUrl": "./",
+    "paths": {
+      "@ts-gun/deduplication": ["../deduplication/src"],
+      "@ts-gun/ham": ["../ham/src/ham.ts"]
+    }
+  },
+  "references": [{ "path": "../deduplication" }, { "path": "../ham" }]
+}
