@@ -1,5 +1,5 @@
 import { Deduplication } from '@ts-gun/deduplication';
-import { HAM } from '@ts-gun/ham';
+import { ConvergeIncoming, Defer, HAM } from '@ts-gun/ham';
 import { Data, Server } from 'ws';
 
 // TODO: Check out Tapable (Webpack)
@@ -7,31 +7,34 @@ const wss = new Server({ port: 8080 });
 const dedup = new Deduplication();
 const root: Graph = {};
 
-const ID_TAG = '#';
-const META_TAG = '_';
-const HAM_TAG = '>';
+const SOUL_TAG: '#' = '#';
+const META_TAG: '_' = '_';
+const HAM_TAG: '>' = '>';
+type Soul = string;
 
 interface Wire {
-  [ID_TAG]: string;
-  put?: Record<string, WirePut> | null;
+  [SOUL_TAG]: Soul;
+  put?: Record<Soul, Node> | null;
   get?: unknown | null;
 }
 
-type ValueTypes = number | string;
+type ValueTypes = string | number | boolean | undefined;
 type Value = Record<string, ValueTypes>;
 
 interface Ref {
-  [ID_TAG]: string;
+  [SOUL_TAG]: Soul;
 }
 
-type WirePut = {
-  [META_TAG]: { [ID_TAG]: string; [HAM_TAG]: Record<string, number> };
-} & Record<string, Value | Ref>;
+type Node = {
+  [META_TAG]: { [SOUL_TAG]: Soul; [HAM_TAG]: Record<string, number> };
+} & GunData;
+
+type GunData = Record<string, Value | Ref>;
 
 function parseGunData(data: Data): Wire | null {
   if (typeof data === 'string') {
     const msg = JSON.parse(data);
-    if (msg[ID_TAG] == null) {
+    if (msg[SOUL_TAG] == null) {
       return null;
     }
     return msg;
@@ -39,32 +42,36 @@ function parseGunData(data: Data): Wire | null {
   return null;
 }
 
-type Graph = Record<string, object>;
+type Graph = Record<string, Node>;
+
+
 
 // ? naming, what means mix in HAM context ?
-function mixHAM(change: Record<string, WirePut>, graph: Graph) {
+function mixHAM(change: Record<string, Node>, graph: Graph) {
   const machine = new Date().getTime();
   let diff = 0;
-  Object.keys(change).forEach((soul) => {
+  Object.keys(change).forEach((soul: Soul) => {
     const node = change[soul];
-    Object.keys(node).forEach((key) => {
-      const val = node[key];
+    Object.keys(node).forEach((key: typeof META_TAG | string) => {
       if (META_TAG === key) {
         return;
       }
+      const val = node[key];
       // TODO: continue here and refactor this code
       const state = node[META_TAG][HAM_TAG][key];
-      const was = (graph[soul] || {[META_TAG]: { [HAM_TAG]: {} } })[META_TAG][HAM_TAG][key] || -Infinity;
+      const was = (graph[soul] || { [META_TAG]: { [HAM_TAG]: {} } })[META_TAG][HAM_TAG][key] || -Infinity;
       const known = (graph[soul] || {})[key];
+
       const ham = HAM(machine, state, was, val, known);
-      if (!ham.incoming) {
-        if (ham.defer) {
+      if (!(ham as ConvergeIncoming).incoming) {
+        if ((ham as Defer).defer) {
+          // tslint:disable-next-line:no-console
           console.log('DEFER', key, val);
           // you'd need to implement this yourself.
         }
         return;
       }
-      (diff || (diff = {}))[soul] = diff[soul] || { _: { '#': soul, '>': {} } };
+      (diff || (diff = {}))[soul] = diff[soul] || { [META_TAG]: { [SOUL_TAG]: soul, [HAM_TAG]: {} } };
       graph[soul] = graph[soul] || { _: { '#': soul, '>': {} } };
       graph[soul][key] = diff[soul][key] = val;
       graph[soul]._['>'][key] = diff[soul]._['>'][key] = state;
@@ -95,8 +102,8 @@ wss.on('connection', (peer) => {
     console.log('Received valid GunData:');
     // tslint:disable-next-line:no-console
     console.dir(msg, { depth: 10 });
-    if (dedup.check(msg[ID_TAG])) {
-      dedup.track(msg[ID_TAG]);
+    if (dedup.check(msg[SOUL_TAG])) {
+      dedup.track(msg[SOUL_TAG]);
       return;
     }
     if (typeof msg.put === 'object' && msg.put != null) {

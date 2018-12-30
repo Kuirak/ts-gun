@@ -1,18 +1,18 @@
 interface DeduplicationOptions {
-  max?: number
-  age?: number
+  max?: number;
+  age?: number;
 }
 
 type GunID = string;
 
-const stack = Symbol("ts-gun Deduplication Cache")
+const stack = Symbol('ts-gun Deduplication Cache');
 
 export class Deduplication {
-  [stack]: Record<GunID,Date> // TODO: ExpiringCacheImplementation
+  [stack]: Record<GunID, Date>; // TODO: ExpiringCacheImplementation
   options: DeduplicationOptions;
 
   constructor(options: DeduplicationOptions = {}) {
-    this.options = {max: options.max ||1000 , age: options.age || 9*1000};
+    this.options = { max: options.max || 1000, age: options.age || 9 * 1000 };
     this[stack] = {};
   }
 
@@ -21,9 +21,8 @@ export class Deduplication {
   }
 
   track(id: GunID): GunID {
-      this[stack][id] = new Date()
+    this[stack][id] = new Date();
 
-      return id
+    return id;
   }
 }
-

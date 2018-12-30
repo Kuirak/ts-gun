@@ -1,8 +1,8 @@
 const Lexical = JSON.stringify;
 
-interface Defer { defer: true }
+export interface Defer { defer: true }
 interface Historical { historical: true }
-interface ConvergeIncoming { converge: true; incoming: true }
+export interface ConvergeIncoming { converge: true; incoming: true }
 interface ConvergeCurrent { converge: true; current: true }
 interface State { state: true }
 interface InvalidCRDT { err: string }
