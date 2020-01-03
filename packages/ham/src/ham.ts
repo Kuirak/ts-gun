@@ -1,14 +1,16 @@
 const Lexical = JSON.stringify;
 
 export interface Defer { defer: true }
-interface Historical { historical: true }
+export interface Historical { historical: true }
 export interface ConvergeIncoming { converge: true; incoming: true }
-interface ConvergeCurrent { converge: true; current: true }
-interface State { state: true }
-interface InvalidCRDT { err: string }
+export interface ConvergeCurrent { converge: true; current: true }
+export interface State { state: true }
+export interface InvalidCRDT { err: string }
 
-type Value = string | number | boolean | undefined;
+export type Value = string | number | boolean | undefined;
 type MachineState = number;
+
+export type HAMResult = Defer | Historical | ConvergeIncoming | State | ConvergeCurrent | InvalidCRDT
 
 /* Based on the Hypothetical Amnesia Machine thought experiment */
 function HAM(
@@ -17,7 +19,7 @@ function HAM(
   currentState: MachineState,
   incomingValue: Value,
   currentValue: Value
-): Defer | Historical | ConvergeIncoming | State | ConvergeCurrent | InvalidCRDT {
+): HAMResult {
   if (machineState < incomingState) {
     return { defer: true }; // the incoming value is outside the boundary of the machine's state, it must be reprocessed in another state.
   }

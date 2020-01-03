@@ -47,6 +47,7 @@ type Graph = Record<string, Node>;
 
 
 // ? naming, what means mix in HAM context ?
+// TODO: move to @ts-gun/core
 function mixHAM(change: Record<string, Node>, graph: Graph) {
   const machine = new Date().getTime();
   let diff = 0;
@@ -72,9 +73,9 @@ function mixHAM(change: Record<string, Node>, graph: Graph) {
         return;
       }
       (diff || (diff = {}))[soul] = diff[soul] || { [META_TAG]: { [SOUL_TAG]: soul, [HAM_TAG]: {} } };
-      graph[soul] = graph[soul] || { _: { '#': soul, '>': {} } };
+      graph[soul] = graph[soul] || { [META_TAG]: { [SOUL_TAG]: soul, [HAM_TAG]: {} } };
       graph[soul][key] = diff[soul][key] = val;
-      graph[soul]._['>'][key] = diff[soul]._['>'][key] = state;
+      graph[soul][META_TAG][HAM_TAG][key] = diff[soul][META_TAG][HAM_TAG][key] = state;
     });
   });
   return diff;
